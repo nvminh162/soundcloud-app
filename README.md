@@ -155,3 +155,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Note**: This is an educational project created for learning purposes. It demonstrates modern web development practices and is not intended for commercial use.
+
+<!-- FE: https://github.com/Yumi-Miyamoto/ReactProMax-NextJS -->
