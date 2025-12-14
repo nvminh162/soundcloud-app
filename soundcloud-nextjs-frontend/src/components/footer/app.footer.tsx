@@ -13,7 +13,7 @@ export default function AppFooter() {
         <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, backgroundColor: '#f2f2f2' }}>
             <Container sx={{ display: 'flex', gap: 10 }}>
                 <AudioPlayer
-                    src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/tracks/hoidanit.mp3`}
                     volume={0.5}
                     style={{
                         boxShadow: 'unset',
