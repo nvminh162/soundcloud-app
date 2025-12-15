@@ -159,7 +159,7 @@ export default function AppHeader() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#ffc0cb' }}>
+            <AppBar position="static" sx={{ backgroundColor: '#333' }}>
                 <Container>
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block', cursor: "pointer" } }} onClick={handleRedirectHome}>

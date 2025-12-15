@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import WaveSurfer from 'wavesurfer.js';
+import WaveSurfer, { WaveSurferOptions } from 'wavesurfer.js';
 
 export const useHasMounted = () => {
     const [hasMounted, setHasMounted] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export const useScript = (url: string) => {
 
 export const useWavesurfer = (
     containerRef: React.RefObject<HTMLDivElement>,
-    options: Omit<WaveShaperOptions, 'container'>
+    options: Omit<WaveSurferOptions, 'container'>
 ) => {
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
 
