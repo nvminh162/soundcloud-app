@@ -1,9 +1,11 @@
 'use client';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 
 export default function WaveTrack() {
-
+    const searchParams = useSearchParams();
+    const fileName = searchParams.get('audio');
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -12,7 +14,7 @@ export default function WaveTrack() {
                 container: containerRef.current,
                 waveColor: 'rgb(200, 0, 200)',
                 progressColor: 'rgb(100, 0, 100)',
-                url: 'http://localhost:8000/tracks/hoidanit.mp3',
+                url: `/api?audio=${fileName}`,
             });
         }
     }, []);
