@@ -10,6 +10,7 @@ export default function DetailTrackPage(props: any) {
 
     return (
         <div>
+            Detail
             <WaveTrack />
         </div>
     );
