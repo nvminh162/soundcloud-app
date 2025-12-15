@@ -3,13 +3,13 @@
     position: relative;
 
     &:hover {
-        #hover {
+        .hover-wave {
             opacity: 1;
         }
     }
 }
 
-#hover {
+.hover-wave {
     position: absolute;
     left: 0;
     top: 0;
@@ -23,8 +23,9 @@
     transition: opacity 0.2s ease;
 }
 
-#time,
-#duration {
+
+.time,
+.duration {
     position: absolute;
     z-index: 11;
     top: 50%;
@@ -36,10 +37,10 @@
     color: #ddd;
 }
 
-#time {
+.time {
     left: 0;
 }
 
-#duration {
+.duration {
     right: 0;
 }
