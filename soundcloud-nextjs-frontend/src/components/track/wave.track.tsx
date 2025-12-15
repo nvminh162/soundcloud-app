@@ -1,44 +1,44 @@
 'use client';
+import { useWavesurfer } from '@/utils/customHook';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState, useMemo } from 'react';
-import WaveSurfer from 'wavesurfer.js';
-
-const useWavesurfer = (containerRef: any, options: any) => {
-    const [wavesurfer, setWavesurfer] = useState<any>(null);
-
-    useEffect(() => {
-        if (!containerRef.current) return;
-
-        const ws = WaveSurfer.create({
-            ...options,
-            container: containerRef.current,
-        });
-
-        setWavesurfer(ws);
-
-        return () => {
-            ws.destroy();
-        };
-    }, [options, containerRef]); // ✅ OK vì options là useMemo
-
-    return wavesurfer;
-};
+import { useRef, useMemo, useCallback, useState, useEffect } from 'react';
 
 export default function WaveTrack() {
     const searchParams = useSearchParams();
     const fileName = searchParams.get('audio');
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
-    // ✅ Dùng useMemo với dependency [fileName]
     const optionsMemo = useMemo(() => {
         return {
             waveColor: 'rgb(200, 0, 200)',
             progressColor: 'rgb(100, 0, 100)',
             url: `/api?audio=${fileName}`,
         };
-    }, [fileName]); // ⚠️ Thêm fileName vào dependency!
+    }, [fileName]);
 
-    const wavesurfer = useWavesurfer(containerRef, optionsMemo);
+    const wavesurfer = useWavesurfer(containerRef, optionsMemo as any);
 
-    return <div ref={containerRef}>WaveTrack</div>;
+    useEffect(() => {
+        if (!wavesurfer) return;
+        setIsPlaying(false);
+        const subscriptions = [wavesurfer.on('play', () => setIsPlaying(true)), wavesurfer.on('pause', () => setIsPlaying(false))];
+        return () => {
+            subscriptions.forEach((unsub) => unsub());
+        };
+    }, [wavesurfer]);
+
+    const onPlayClick = useCallback(() => {
+        if (wavesurfer) {
+            wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play();
+            setIsPlaying(wavesurfer.isPlaying());
+        }
+    }, [wavesurfer]);
+
+    return (
+        <div>
+            <div ref={containerRef}>WaveTrack</div>
+            <button onClick={onPlayClick}>{isPlaying ? 'Pause' : 'Play'}</button>
+        </div>
+    );
 }
