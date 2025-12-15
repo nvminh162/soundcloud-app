@@ -1,6 +1,12 @@
 .wave-form-container {
     cursor: pointer;
     position: relative;
+
+    &:hover {
+        #hover {
+            opacity: 1;
+        }
+    }
 }
 
 #hover {
@@ -15,10 +21,6 @@
     background: rgba(255, 255, 255, 0.5);
     opacity: 0;
     transition: opacity 0.2s ease;
-}
-
-#waveform:hover #hover {
-    opacity: 1;
 }
 
 #time,
