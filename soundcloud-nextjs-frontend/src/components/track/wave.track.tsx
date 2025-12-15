@@ -12,7 +12,7 @@ export default function WaveTrack() {
                 container: containerRef.current,
                 waveColor: 'rgb(200, 0, 200)',
                 progressColor: 'rgb(100, 0, 100)',
-                url: '/audio/hoidanit.mp3',
+                url: 'http://localhost:8000/tracks/hoidanit.mp3',
             });
         }
     }, []);
