@@ -66,6 +66,7 @@ export default function AppHeader() {
     const { data: session } = useSession();
     console.log('Check session: ', session);
     console.log('Check hook: ', useSession());
+
     const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
