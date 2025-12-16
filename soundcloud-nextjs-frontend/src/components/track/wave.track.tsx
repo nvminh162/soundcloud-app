@@ -7,10 +7,16 @@ import { WaveSurferOptions } from 'wavesurfer.js';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import './wave.scss';
+import { formatTime } from "@/utils/timeHelper";
+import { arrComments } from "@/mocks/comments";
+import { calLeft } from "@/utils/calLeftHelper";
+import { Tooltip } from "@mui/material";
 
 const WaveTrack = () => {
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio');
+
     const containerRef = useRef<HTMLDivElement>(null);
     const hoverRef = useRef<HTMLDivElement>(null);
 
@@ -50,8 +56,8 @@ const WaveTrack = () => {
             url: `/api?audio=${fileName}`,
         }
     }, []);
+
     const wavesurfer = useWavesurfer(containerRef, optionsMemo);
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
     // Initialize wavesurfer when the container mounts
     // or any of the props change
@@ -77,9 +83,7 @@ const WaveTrack = () => {
             })
         ]
 
-        return () => {
-            subscriptions.forEach((unsub) => unsub())
-        }
+        return () => { subscriptions.forEach((unsub) => unsub()) }
     }, [wavesurfer])
 
     // On play button click
@@ -88,13 +92,6 @@ const WaveTrack = () => {
             wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play();
         }
     }, [wavesurfer]);
-
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60)
-        const secondsRemainder = Math.round(seconds) % 60
-        const paddedSeconds = `0${secondsRemainder}`.slice(-2)
-        return `${minutes}:${paddedSeconds}`
-    }
 
     return (
         <div style={{ marginTop: 20 }}>
@@ -150,7 +147,7 @@ const WaveTrack = () => {
                                 width: "fit-content",
                                 color: "white"
                             }}>
-                                nvminh162's song
+                                nvminh162's Moi Song
                             </div>
                             <div style={{
                                 padding: "0 5px",
@@ -161,7 +158,7 @@ const WaveTrack = () => {
                                 color: "white"
                             }}
                             >
-                                Van Minh
+                                nvminh162
                             </div>
                         </div>
                     </div>
@@ -179,7 +176,33 @@ const WaveTrack = () => {
                                 backdropFilter: "brightness(0.5)"
                             }}
                         ></div>
-
+                        <div className="comments"
+                            style={{ position: "relative" }}
+                        >
+                            {
+                                arrComments.map(item => {
+                                    return (
+                                        <Tooltip title={item.content} arrow>
+                                            <img
+                                            onPointerMove={(e) => {
+                                                const hover = hoverRef.current!;
+                                                hover.style.width = calLeft(item.moment)
+                                            }}
+                                            key={item.id}
+                                            style={{
+                                                height: 20, width: 20,
+                                                position: "absolute",
+                                                top: 71,
+                                                zIndex: 20,
+                                                left: calLeft(item.moment)
+                                            }}
+                                            src={`http://localhost:8000/images/chill1.png`}
+                                        />
+                                        </Tooltip>
+                                    )
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
                 <div className="right"
