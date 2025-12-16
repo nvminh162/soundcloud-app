@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -107,7 +107,14 @@ export default function AppHeader() {
                     Profile
                 </Link>
             </MenuItem>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleMenuClose();
+                    signOut();
+                }}
+            >
+                Logout
+            </MenuItem>
         </Menu>
     );
 
@@ -205,7 +212,9 @@ export default function AppHeader() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href={'/api/auth/signin'}>Login</Link>
+                                    <Link href={'#'} onClick={() => signIn()}>
+                                        Login
+                                    </Link>
                                 </>
                             )}
                         </Box>
