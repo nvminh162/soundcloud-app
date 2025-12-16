@@ -182,13 +182,12 @@ const WaveTrack = () => {
                             {
                                 arrComments.map(item => {
                                     return (
-                                        <Tooltip title={item.content} arrow>
+                                        <Tooltip key={item.id} title={item.content} arrow>
                                             <img
                                             onPointerMove={(e) => {
                                                 const hover = hoverRef.current!;
                                                 hover.style.width = calLeft(item.moment)
                                             }}
-                                            key={item.id}
                                             style={{
                                                 height: 20, width: 20,
                                                 position: "absolute",
