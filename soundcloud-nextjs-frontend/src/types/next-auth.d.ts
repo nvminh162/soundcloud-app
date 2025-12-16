@@ -1,5 +1,4 @@
 import NextAuth, { DefaultSession } from 'next-auth';
-import { DefaultJWT } from 'next-auth/jwt';
 
 interface IUser {
     _id: string;
@@ -24,11 +23,9 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
     /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
     interface JWT {
-        user: {
-            /** The user's postal address. */
-            access_token: string;
-            refresh_token: string;
-            user: IUser;
-        };
+        /** The user's postal address. */
+        access_token: string;
+        refresh_token: string;
+        user: IUser;
     }
 }
