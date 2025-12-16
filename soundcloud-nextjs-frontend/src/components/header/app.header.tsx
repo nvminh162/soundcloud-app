@@ -1,5 +1,5 @@
 'use client';
-
+import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -63,6 +63,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+    const { data: session } = useSession();
+    console.log('Check session: ', session);
+    console.log('Check hook: ', useSession());
     const router = useRouter();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -99,7 +102,9 @@ export default function AppHeader() {
             onClose={handleMenuClose}
         >
             <MenuItem>
-                <Link href={'/profile'} style={{ color: "unset", textDecoration: "unset" }}>Profile</Link>
+                <Link href={'/profile'} style={{ color: 'unset', textDecoration: 'unset' }}>
+                    Profile
+                </Link>
             </MenuItem>
             <MenuItem>Logout</MenuItem>
         </Menu>
@@ -154,16 +159,21 @@ export default function AppHeader() {
     );
 
     const handleRedirectHome = () => {
-        router.push("/")
-    }
+        router.push('/');
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" sx={{ backgroundColor: '#333' }}>
                 <Container>
                     <Toolbar>
-                        <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block', cursor: "pointer" } }} onClick={handleRedirectHome}>
-
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block', cursor: 'pointer' } }}
+                            onClick={handleRedirectHome}
+                        >
                             MinhSoundcloud
                         </Typography>
                         <Search>
@@ -179,16 +189,24 @@ export default function AppHeader() {
                                 gap: '20px',
                                 alignItems: 'center',
                                 cursor: 'pointer',
-                                "> a": {
-                                    color: "unset",
-                                    textDecoration: "unset"
-                                }
+                                '> a': {
+                                    color: 'unset',
+                                    textDecoration: 'unset',
+                                },
                             }}
                         >
-                            <Link href={'/playlist'}>Playlists</Link>
-                            <Link href={'/like'}>Likes</Link>
-                            <span>Upload</span>
-                            <Avatar onClick={handleProfileMenuOpen}>VM</Avatar>
+                            {session ? (
+                                <>
+                                    <Link href={'/playlist'}>Playlists</Link>
+                                    <Link href={'/like'}>Likes</Link>
+                                    <span>Upload</span>
+                                    <Avatar onClick={handleProfileMenuOpen}>VM</Avatar>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href={'/api/auth/signin'}>Login</Link>
+                                </>
+                            )}
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
