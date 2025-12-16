@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
-import { AuthOptions } from 'next-auth'
+import { AuthOptions } from 'next-auth';
 
 export const authOptions: AuthOptions = {
     secret: process.env.NO_SECRET!,
@@ -12,18 +12,23 @@ export const authOptions: AuthOptions = {
         }),
         // ...add more providers here
     ],
+    /*
+    15 C14 => 012 1333
+    Mỗi lần login thành công (jwt: ({ token })) sẽ được lưu dưới dạng cookies tại phía browser của client
+    Mỗi lần refresh lại trang, sẽ gọi token trên gửi lên NextServer => phàn token sẽ được giải mã => nạp vào session
+     */
     callbacks: {
         jwt: ({ token, user, account, profile, trigger }) => {
             if (trigger === 'signIn' && account?.provider === 'github') {
-                token.address = "nvminh162";
+
             }
             return token;
         },
         session: ({ session, token, user }) => {
-            session.user.address = "token.address";
+
             return session;
-        }
-    }
+        },
+    },
 };
 
 const handler = NextAuth(authOptions);
