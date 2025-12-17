@@ -4,8 +4,9 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import StepOne from './step/step.one';
 import { Container } from '@mui/material';
+import StepOnce from './step/step.once';
+import StepSecond from './step/step.second';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -53,10 +54,10 @@ export default function UploadTabs() {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <StepOne />
+                    <StepOnce />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                    Basic information
+                    <StepSecond />
                 </CustomTabPanel>
             </Box>
         </Container>
