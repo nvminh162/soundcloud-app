@@ -7,6 +7,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useCallback } from 'react';
 import { sendRequestFile } from '@/utils/api';
 import { useSession } from 'next-auth/react';
+import axios from 'axios';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -44,16 +45,27 @@ export default function StepOnce() {
                 const audio = acceptedFiles[0];
                 const formData = new FormData();
                 formData.append('fileUpload', audio);
-                const res = await sendRequestFile<IBackendRes<ITrackTop[]>>({
-                    url: 'http://localhost:8000/api/v1/files/upload',
-                    headers: {
-                        Authorization: `Bearer ${session?.access_token}`,
-                        target_type: 'tracks',
-                    },
-                    method: 'POST',
-                    body: formData,
-                });
-                console.log('session: ', session?.access_token);
+                // const res = await sendRequestFile<IBackendRes<ITrackTop[]>>({
+                //     url: 'http://localhost:8000/api/v1/files/upload',
+                //     headers: {
+                //         Authorization: `Bearer ${session?.access_token}`,
+                //         target_type: 'tracks',
+                //     },
+                //     method: 'POST',
+                //     body: formData,
+                // });
+                try {
+                    const res = await axios.post('http://localhost:8000/api/v1/files/upload', formData, {
+                        headers: {
+                            Authorization: `Bearer ${session?.access_token}`,
+                            target_type: 'tracks',
+                        },
+                    });
+                    console.log(res.data);
+                } catch (error) {
+                    // @ts-ignore
+                    alert(error?.response?.data?.message)
+                }
             }
         },
         [session],
