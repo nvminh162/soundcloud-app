@@ -1,6 +1,9 @@
+import AuthSignIn from "@/components/auth/auth.signin";
 
 export default function SigninPage() {
   return (
-    <div>Sign in Page</div>
+    <>
+      <AuthSignIn />
+    </>
   )
 }
