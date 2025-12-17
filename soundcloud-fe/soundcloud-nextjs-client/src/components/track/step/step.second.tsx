@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -8,9 +8,7 @@ import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgres
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import React from 'react';
 import { styled } from '@mui/material';
-
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -25,21 +23,11 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
     );
 }
 
-function LinearWithValueLabel() {
-    const [progress, setProgress] = React.useState(10);
-
-    React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-        }, 800);
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
-
+function LinearWithValueLabel(props: IProps) {
+    const { trackUpload } = props;
     return (
         <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={progress} />
+            <LinearProgressWithLabel value={trackUpload.percent} />
         </Box>
     );
 }
@@ -55,7 +43,6 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
-
 
 function InputFileUpload() {
     return (
@@ -73,7 +60,14 @@ function InputFileUpload() {
     );
 }
 
-export default function StepSecond() {
+interface IProps {
+    trackUpload: { fileName: string; percent: number };
+}
+
+export default function StepSecond(props: IProps) {
+    const { trackUpload } = props;
+    console.log(trackUpload);
+
     const category = [
         {
             value: 'CHILL',
@@ -92,8 +86,8 @@ export default function StepSecond() {
     return (
         <div>
             <div>
-                <div>Your uploading track:</div>
-                <LinearWithValueLabel />
+                <div>Your uploading track: {trackUpload.fileName}</div>
+                <LinearWithValueLabel trackUpload={trackUpload} />
             </div>
 
             <Grid container spacing={2} mt={5}>
