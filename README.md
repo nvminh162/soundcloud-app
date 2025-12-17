@@ -69,7 +69,7 @@ Beyond basic knowledge, additional topics covered:
 
 ### Backend Setup
 ```bash
-cd soundcloud-nestjs-backend
+cd soundcloud-be
 npm install
 npm run start:dev
 ```
@@ -91,7 +91,7 @@ npm run dev
 ```
 soundcloud-app/
 ├── README.md
-├── soundcloud-nestjs-backend/          # NestJS Backend
+├── soundcloud-be/          # NestJS Backend
 │   ├── package.json
 │   ├── postman/                        # API Collection
 │   ├── public/                         # Static Assets
