@@ -10,6 +10,8 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -45,18 +47,40 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-function InputFileUpload() {
+function InputFileUpload({ info, setInfo }: any) {
+    const { data: session } = useSession();
+
+    const handleUpload = async (image: any) => {
+        const formData = new FormData();
+        formData.append('fileUpload', image);
+        try {
+            const res = await axios.post('http://localhost:8000/api/v1/files/upload', formData, {
+                headers: {
+                    Authorization: `Bearer ${session?.access_token}`,
+                    target_type: 'images',
+                },
+            });
+            setInfo({ ...info, imgUrl: res.data.data.fileName });
+        } catch (error) {
+            // @ts-ignore
+            alert(error?.response?.data?.message);
+        }
+    };
+
     return (
         <Button
-            onClick={(e) => e.preventDefault()}
+            onChange={(e) => {
+                const event = e.target as HTMLInputElement;
+                if (event.files) {
+                    handleUpload(event.files[0]);
+                }
+            }}
             component="label"
-            role={undefined}
             variant="contained"
-            tabIndex={-1}
             startIcon={<CloudUploadIcon />}
         >
             Upload files
-            <VisuallyHiddenInput type="file" onChange={(event) => console.log(event.target.files)} multiple />
+            <VisuallyHiddenInput type="file" />
         </Button>
     );
 }
@@ -108,7 +132,9 @@ export default function StepSecond(props: IProps) {
         }
     }, [trackUpload]);
 
-    console.log(info);
+    const handleSubmitForm = () => {
+        console.log(info);
+    };
 
     return (
         <div>
@@ -131,10 +157,19 @@ export default function StepSecond(props: IProps) {
                     }}
                 >
                     <div style={{ height: 250, width: 250, background: '#ccc' }}>
-                        <div></div>
+                        <div>
+                            {info.imgUrl && (
+                                <img
+                                    style={{ objectFit: 'cover' }}
+                                    height={250}
+                                    width={250}
+                                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${info.imgUrl}`}
+                                />
+                            )}
+                        </div>
                     </div>
                     <div>
-                        <InputFileUpload />
+                        <InputFileUpload info={info} setInfo={setInfo} />
                     </div>
                 </Grid>
                 <Grid item xs={6} md={8}>
@@ -177,6 +212,7 @@ export default function StepSecond(props: IProps) {
                         sx={{
                             mt: 5,
                         }}
+                        onClick={handleSubmitForm}
                     >
                         Save
                     </Button>
