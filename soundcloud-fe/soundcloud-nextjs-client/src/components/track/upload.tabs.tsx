@@ -35,9 +35,10 @@ function a11yProps(index: number) {
 export default function UploadTabs() {
     const [value, setValue] = React.useState(0);
     const [trackUpload, setTrackUpload] = React.useState({
-        fileName: "",
+        fileName: '',
         percent: 0,
-    })
+        uploadedTrackName: '',
+    });
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -58,9 +59,9 @@ export default function UploadTabs() {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    <StepOnce setValue={setValue} setTrackUpload={setTrackUpload} />
+                    <StepOnce setValue={setValue} trackUpload={trackUpload} setTrackUpload={setTrackUpload} />
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={1} >
+                <CustomTabPanel value={value} index={1}>
                     <StepSecond trackUpload={trackUpload} />
                 </CustomTabPanel>
             </Box>

@@ -39,11 +39,12 @@ function InputFileUpload() {
 
 interface IProps {
     setValue: (v: number) => void;
-    setTrackUpload: (V: { fileName: string; percent: number }) => void;
+    trackUpload: { fileName: string; percent: number; uploadedTrackName: string; };
+    setTrackUpload: (V: { fileName: string; percent: number; uploadedTrackName: string; }) => void;
 }
 
 export default function StepOnce(props: IProps) {
-    const { setValue, setTrackUpload } = props;
+    const { setValue, trackUpload, setTrackUpload } = props;
     const { data: session } = useSession();
     const onDrop = useCallback(
         async (acceptedFiles: FileWithPath[]) => {
@@ -73,6 +74,7 @@ export default function StepOnce(props: IProps) {
                         onUploadProgress: (progressEvent) => {
                             let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total!);
                             setTrackUpload({
+                                ...trackUpload,
                                 fileName: audio.name,
                                 percent: percentCompleted,
                             });
@@ -80,7 +82,10 @@ export default function StepOnce(props: IProps) {
                             // maybe dispatch an action that will update a progress bar or something
                         },
                     });
-                    console.log(res.data);
+                    setTrackUpload({
+                        ...trackUpload,
+                        uploadedTrackName: res.data.data.fileName,
+                    });
                 } catch (error) {
                     // @ts-ignore
                     alert(error?.response?.data?.message);
