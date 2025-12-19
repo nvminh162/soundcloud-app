@@ -12,6 +12,7 @@ import { styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import { sendRequest } from '@/utils/api';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -98,6 +99,7 @@ interface INewTrack {
 }
 
 export default function StepSecond(props: IProps) {
+    const { data: session } = useSession();
     const { trackUpload } = props;
     const [info, setInfo] = useState<INewTrack>({
         title: '',
@@ -132,8 +134,26 @@ export default function StepSecond(props: IProps) {
         }
     }, [trackUpload]);
 
-    const handleSubmitForm = () => {
-        console.log(info);
+    const handleSubmitForm = async () => {
+        const res = await sendRequest<IBackendRes<ITrackTop[]>>({
+            url: 'http://localhost:8000/api/v1/tracks',
+            headers: {
+                Authorization: `Bearer ${session?.access_token}`,
+            },
+            method: 'POST',
+            body: {
+                title: info.title,
+                description: info.description,
+                trackUrl: info.trackUrl,
+                imgUrl: info.imgUrl,
+                category: info.category,
+            },
+        });
+        if (res.data) {
+            alert("Create track success")
+        } else {
+            alert(res.message)
+        }
     };
 
     return (
