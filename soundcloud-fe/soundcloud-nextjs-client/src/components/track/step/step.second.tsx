@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { sendRequest } from '@/utils/api';
+import { useToast } from '@/lib/toast';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
@@ -50,6 +51,7 @@ const VisuallyHiddenInput = styled('input')({
 
 function InputFileUpload({ info, setInfo }: any) {
     const { data: session } = useSession();
+    const toast = useToast();
 
     const handleUpload = async (image: any) => {
         const formData = new FormData();
@@ -64,7 +66,8 @@ function InputFileUpload({ info, setInfo }: any) {
             setInfo({ ...info, imgUrl: res.data.data.fileName });
         } catch (error) {
             // @ts-ignore
-            alert(error?.response?.data?.message);
+            // alert(error?.response?.data?.message);
+            toast.error(error?.response?.data?.message);
         }
     };
 
@@ -72,21 +75,29 @@ function InputFileUpload({ info, setInfo }: any) {
         <Button
             onChange={(e) => {
                 const event = e.target as HTMLInputElement;
-                if (event.files) {
-                    handleUpload(event.files[0]);
+                if (!event.files || !event.files[0]) return;
+
+                const file = event.files[0];
+                if (!file.type.startsWith('image/')) {
+                    alert('Only image files are allowed for this step.');
+                    event.value = '';
+                    return;
                 }
+
+                handleUpload(file);
             }}
             component="label"
             variant="contained"
             startIcon={<CloudUploadIcon />}
         >
             Upload files
-            <VisuallyHiddenInput type="file" />
+            <VisuallyHiddenInput type="file" accept="image/*" />
         </Button>
     );
 }
 
 interface IProps {
+    setValue?: (v: number) => void;
     trackUpload: { fileName: string; percent: number; uploadedTrackName: string };
 }
 
@@ -99,8 +110,9 @@ interface INewTrack {
 }
 
 export default function StepSecond(props: IProps) {
+    const { trackUpload, setValue } = props;
+    const toast = useToast();
     const { data: session } = useSession();
-    const { trackUpload } = props;
     const [info, setInfo] = useState<INewTrack>({
         title: '',
         description: '',
@@ -150,9 +162,12 @@ export default function StepSecond(props: IProps) {
             },
         });
         if (res.data) {
-            alert("Create track success")
+            // alert('Create track success');
+            setValue?.(0);
+            toast.success('Create track success');
         } else {
-            alert(res.message)
+            // alert(res.message);
+            toast.error(res.message);
         }
     };
 

@@ -1,5 +1,6 @@
 import ThemeRegistry from '@/components/theme-registry/theme.registry';
 import NextAuthWrapper from '@/lib/next.auth.wrapper';
+import { ToastProvider } from '@/lib/toast';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -7,10 +8,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body suppressHydrationWarning>
                 {/* Caching data MUI */}
                 <ThemeRegistry>
-                    {/* chia sẽ session giữa các component */}
-                    <NextAuthWrapper>
-                        {children}
-                    </NextAuthWrapper>
+                    <ToastProvider>
+                        {/* chia sẽ session giữa các component */}
+                        <NextAuthWrapper>
+                            {children}
+                        </NextAuthWrapper>
+                    </ToastProvider>
                 </ThemeRegistry>
             </body>
         </html>
