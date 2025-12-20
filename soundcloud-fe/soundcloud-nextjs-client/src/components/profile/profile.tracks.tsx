@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -11,14 +11,20 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import { ListItem } from '@mui/material';
+import { useTrackContext } from '@/lib/track.wrapper';
 
+interface IProps {
+    data: ITrackTop;
+}
 
-const ProfileTracks = (props: any) => {
+const ProfileTracks = (props: IProps) => {
     const { data } = props;
     const theme = useTheme();
 
+    const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
+
     return (
-        <Card sx={{ display: 'flex', justifyContent: "space-between" }}>
+        <Card sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography component="div" variant="h5">
@@ -29,25 +35,16 @@ const ProfileTracks = (props: any) => {
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                    <IconButton aria-label="previous">
-                        {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                    </IconButton>
-                    <IconButton aria-label="play/pause">
+                    <IconButton aria-label="previous">{theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}</IconButton>
+                    <IconButton aria-label="play/pause" onClick={() => setCurrentTrack({ ...data, isPlaying: false })}>
                         <PlayArrowIcon sx={{ height: 38, width: 38 }} />
                     </IconButton>
-                    <IconButton aria-label="next">
-                        {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                    </IconButton>
+                    <IconButton aria-label="next">{theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}</IconButton>
                 </Box>
             </Box>
-            <CardMedia
-                component="img"
-                sx={{ width: 151 }}
-                image={`http://localhost:8000/images/${data.imgUrl}`}
-                alt="Live from space album cover"
-            />
+            <CardMedia component="img" sx={{ width: 151 }} image={`http://localhost:8000/images/${data.imgUrl}`} alt="Live from space album cover" />
         </Card>
     );
-}
+};
 
 export default ProfileTracks;

@@ -50,5 +50,14 @@ declare global {
         },
         result: T[]
     }
+
+    interface ISharedTrack extends ITrackTop {
+        isPlaying: boolean;
+    }
+
+    interface ITrackContext {
+        currentTrack: ISharedTrack;
+        setCurrentTrack: (currentTrack: ISharedTrack) => void;
+    }
 }
 
