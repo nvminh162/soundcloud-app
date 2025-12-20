@@ -2,7 +2,7 @@
 import { useTrackContext } from '@/lib/track.wrapper';
 import { useHasMounted } from '@/utils/customHook';
 import { AppBar, Container } from '@mui/material';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
@@ -12,14 +12,17 @@ export default function AppFooter() {
 
     const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
-    // @ts-ignore
-    if (currentTrack?.isPlaying) {
+    useEffect(() => {
         // @ts-ignore
-        playerRef?.current?.audio?.current?.play();
-    } else {
-        // @ts-ignore
-        playerRef?.current?.audio?.current?.pause();
-    }
+        if (currentTrack?.isPlaying === false) {
+            // @ts-ignore
+            playerRef?.current?.audio?.current?.pause();
+        }
+        if (currentTrack?.isPlaying === true) {
+            // @ts-ignore
+            playerRef?.current?.audio?.current?.play();
+        }
+    }, [currentTrack]);
 
     if (!hasMounted) return <></>;
 
@@ -36,8 +39,8 @@ export default function AppFooter() {
                             boxShadow: 'unset',
                             background: '#f2f2f2',
                         }}
-                        onPlay={() => setCurrentTrack({...currentTrack, isPlaying: true})}
-                        onPause={() => setCurrentTrack({...currentTrack, isPlaying: false})}
+                        onPlay={() => setCurrentTrack({ ...currentTrack, isPlaying: true })}
+                        onPause={() => setCurrentTrack({ ...currentTrack, isPlaying: false })}
                     />
                     <div
                         style={{

@@ -11,16 +11,22 @@ import { formatTime } from '@/utils/timeHelper';
 import { arrComments } from '@/mocks/comments';
 import { calLeft } from '@/utils/calLeftHelper';
 import { Tooltip } from '@mui/material';
-import { sendRequest } from '@/utils/api';
+import { useTrackContext } from '@/lib/track.wrapper';
 
-const WaveTrack = () => {
+interface IProps {
+    track: ITrackTop | null;
+}
+
+const WaveTrack = (props: IProps) => {
+    const { track } = props;
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const searchParams = useSearchParams();
-    const id = searchParams.get('id');
     const fileName = searchParams.get('audio');
 
     const containerRef = useRef<HTMLDivElement>(null);
     const hoverRef = useRef<HTMLDivElement>(null);
+
+    const { currentTrack, setCurrentTrack } = useTrackContext() as ITrackContext;
 
     const [time, setTime] = useState<string>('0:00');
     const [duration, setDuration] = useState<string>('0:00');
@@ -60,7 +66,6 @@ const WaveTrack = () => {
 
     const wavesurfer = useWavesurfer(containerRef, optionsMemo);
 
-    const [trackInfo, setTrackInfo] = useState<ITrackTop | null>(null);
     // Initialize wavesurfer when the container mounts
     // or any of the props change
     useEffect(() => {
@@ -90,25 +95,24 @@ const WaveTrack = () => {
         };
     }, [wavesurfer]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-          const res = await sendRequest<IBackendRes<ITrackTop>>({
-            url: `http://localhost:8000/api/v1/tracks/${id}`,
-            method: "GET",
-          });
-          if (res && res.data) {
-            setTrackInfo(res.data)
-          }
-        }
-        fetchData();
-      }, [id]);
-
     // On play button click
     const onPlayClick = useCallback(() => {
         if (wavesurfer) {
             wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play();
         }
     }, [wavesurfer]);
+
+    useEffect(() => {
+        if (wavesurfer && currentTrack.isPlaying) {
+            wavesurfer.pause();
+        }
+    }, [currentTrack]);
+
+    useEffect(() => {
+        if (track?._id && !currentTrack?.isPlaying) {
+            setCurrentTrack({ ...track, isPlaying: false });
+        }
+    }, [track]);
 
     return (
         <div style={{ marginTop: 20 }}>
@@ -134,7 +138,12 @@ const WaveTrack = () => {
                     <div className="info" style={{ display: 'flex' }}>
                         <div>
                             <div
-                                onClick={() => onPlayClick()}
+                                onClick={() => {
+                                    onPlayClick();
+                                    if (track && wavesurfer) {
+                                        setCurrentTrack({ ...currentTrack, isPlaying: false });
+                                    }
+                                }}
                                 style={{
                                     borderRadius: '50%',
                                     background: '#f50',
@@ -163,7 +172,7 @@ const WaveTrack = () => {
                                     color: 'white',
                                 }}
                             >
-                                {trackInfo?.title}
+                                {track?.title}
                             </div>
                             <div
                                 style={{
@@ -175,7 +184,7 @@ const WaveTrack = () => {
                                     color: 'white',
                                 }}
                             >
-                                 {trackInfo?.description}
+                                {track?.description}
                             </div>
                         </div>
                     </div>
