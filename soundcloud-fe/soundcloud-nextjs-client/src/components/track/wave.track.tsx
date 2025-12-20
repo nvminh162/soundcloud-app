@@ -11,10 +11,12 @@ import { formatTime } from '@/utils/timeHelper';
 import { arrComments } from '@/mocks/comments';
 import { calLeft } from '@/utils/calLeftHelper';
 import { Tooltip } from '@mui/material';
+import { sendRequest } from '@/utils/api';
 
 const WaveTrack = () => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const searchParams = useSearchParams();
+    const id = searchParams.get('id');
     const fileName = searchParams.get('audio');
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -58,6 +60,7 @@ const WaveTrack = () => {
 
     const wavesurfer = useWavesurfer(containerRef, optionsMemo);
 
+    const [trackInfo, setTrackInfo] = useState<ITrackTop | null>(null);
     // Initialize wavesurfer when the container mounts
     // or any of the props change
     useEffect(() => {
@@ -86,6 +89,19 @@ const WaveTrack = () => {
             subscriptions.forEach((unsub) => unsub());
         };
     }, [wavesurfer]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+          const res = await sendRequest<IBackendRes<ITrackTop>>({
+            url: `http://localhost:8000/api/v1/tracks/${id}`,
+            method: "GET",
+          });
+          if (res && res.data) {
+            setTrackInfo(res.data)
+          }
+        }
+        fetchData();
+      }, [id]);
 
     // On play button click
     const onPlayClick = useCallback(() => {
@@ -147,7 +163,7 @@ const WaveTrack = () => {
                                     color: 'white',
                                 }}
                             >
-                                nvminh162's Moi Song
+                                {trackInfo?.title}
                             </div>
                             <div
                                 style={{
@@ -159,7 +175,7 @@ const WaveTrack = () => {
                                     color: 'white',
                                 }}
                             >
-                                nvminh162
+                                 {trackInfo?.description}
                             </div>
                         </div>
                     </div>

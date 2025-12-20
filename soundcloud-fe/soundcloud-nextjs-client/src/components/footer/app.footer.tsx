@@ -48,8 +48,8 @@ export default function AppFooter() {
                             minWidth: 100,
                         }}
                     >
-                        <div style={{ color: '#ccc' }}>Eric</div>
-                        <div style={{ color: 'black' }}>Who am I ?</div>
+                        <div style={{ color: '#ccc' }}>{currentTrack?.description}</div>
+                        <div style={{ color: 'black' }}>{currentTrack?.title}</div>
                     </div>
                 </Container>
             </AppBar>
