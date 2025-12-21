@@ -11,9 +11,9 @@ type Props = {
 // Thực hiện fetch data dùng để thay đổi title bài nhạc
 export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
     // Thực hiện cắt (split) để lấy id từ link Url (params.slug)
-    const temp = params?.slug?.split('.html') ?? [];
-    const temp1 = temp[0]?.split('-') as string[];
-    const id = temp1[temp1.length - 1];
+    const cleanSuffixHTML = params?.slug?.split('.html') ?? [];
+    const temp = cleanSuffixHTML[0]?.split('-') as string[];
+    const id = temp[temp.length - 1];
 
     // fetch data
     const res = await sendRequest<IBackendRes<ITrackTop>>({
@@ -36,8 +36,12 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
 export default async function DetailTrackPage(props: any) {
     const { params } = props;
 
+    const cleanSuffixHTML = params?.slug?.split('.html') ?? [];
+    const temp = cleanSuffixHTML[0]?.split('-') as string[];
+    const id = temp[temp.length - 1];
+
     const res = await sendRequest<IBackendRes<ITrackTop>>({
-        url: `http://localhost:8000/api/v1/tracks/${params.slug}`,
+        url: `http://localhost:8000/api/v1/tracks/${id}`,
         method: 'GET',
         nextOption: { cache: 'no-store' },
     });
