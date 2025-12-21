@@ -1,6 +1,37 @@
 import WaveTrack from '@/components/track/wave.track';
 import { sendRequest } from '@/utils/api';
 import Container from '@mui/material/Container';
+import { Metadata, ResolvingMetadata } from 'next';
+
+type Props = {
+    params: { slug: string };
+    searchParams: { [key: string]: string | string[] | undefined };
+};
+
+// Thực hiện fetch data dùng để thay đổi title bài nhạc
+export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+    // Thực hiện cắt (split) để lấy id từ link Url (params.slug)
+    const temp = params?.slug?.split('.html') ?? [];
+    const temp1 = temp[0]?.split('-') as string[];
+    const id = temp1[temp1.length - 1];
+
+    // fetch data
+    const res = await sendRequest<IBackendRes<ITrackTop>>({
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
+        method: 'GET',
+    });
+
+    return {
+        title: res.data?.title,
+        description: res.data?.description,
+        openGraph: {
+            title: 'Thông tin SoundCloud',
+            description: 'Beyond Your Coding Skills',
+            type: 'website',
+            images: [`https://avatars.githubusercontent.com/u/121565657?v=4`],
+        },
+    };
+}
 
 export default async function DetailTrackPage(props: any) {
     const { params } = props;
@@ -8,7 +39,7 @@ export default async function DetailTrackPage(props: any) {
     const res = await sendRequest<IBackendRes<ITrackTop>>({
         url: `http://localhost:8000/api/v1/tracks/${params.slug}`,
         method: 'GET',
-        nextOption: { cache: "no-store" }
+        nextOption: { cache: 'no-store' },
     });
 
     const resCmt = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
@@ -24,7 +55,7 @@ export default async function DetailTrackPage(props: any) {
     return (
         <Container>
             <div>
-                <WaveTrack track={res?.data ?? null} comments={resCmt.data?.result ?? []}  />
+                <WaveTrack track={res?.data ?? null} comments={resCmt.data?.result ?? []} />
             </div>
         </Container>
     );

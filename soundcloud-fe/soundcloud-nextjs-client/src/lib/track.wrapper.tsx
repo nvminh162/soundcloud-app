@@ -28,7 +28,7 @@ export const TrackContextProvider = ({ children }: { children: React.ReactNode }
         updatedAt: "",
         isPlaying: false,
     }
-    const [currentTrack, setCurrentTrack] = useState<ISharedTrack>(initialValue);
+    const [currentTrack, setCurrentTrack] = useState<IShareTrack>(initialValue);
 
     return (
         <TrackContext.Provider value={{ currentTrack, setCurrentTrack }}>
