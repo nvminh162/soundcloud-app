@@ -8,17 +8,18 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import './wave.scss';
 import { formatTime } from '@/utils/timeHelper';
-import { arrComments } from '@/mocks/comments';
-import { calLeft } from '@/utils/calLeftHelper';
 import { Tooltip } from '@mui/material';
 import { useTrackContext } from '@/lib/track.wrapper';
+import CommentTrack from './comment.track';
+import LikeTrack from './like.track';
 
 interface IProps {
     track: ITrackTop | null;
+    comments: ITrackComment[];
 }
 
 const WaveTrack = (props: IProps) => {
-    const { track } = props;
+    const { track, comments } = props;
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const searchParams = useSearchParams();
     const fileName = searchParams.get('audio');
@@ -102,6 +103,12 @@ const WaveTrack = (props: IProps) => {
         }
     }, [wavesurfer]);
 
+    const calLeft = (moment: number) => {
+        const hardCodeDuration = wavesurfer?.getDuration() ?? 0;
+        const percent = (moment / hardCodeDuration) * 100;
+        return `${percent}%`;
+    };
+
     useEffect(() => {
         if (wavesurfer && currentTrack.isPlaying) {
             wavesurfer.pause();
@@ -109,7 +116,7 @@ const WaveTrack = (props: IProps) => {
     }, [currentTrack]);
 
     useEffect(() => {
-        if (track?._id && !currentTrack?.isPlaying) {
+        if (track?._id && !currentTrack?._id) {
             setCurrentTrack({ ...track, isPlaying: false });
         }
     }, [track]);
@@ -204,13 +211,13 @@ const WaveTrack = (props: IProps) => {
                             }}
                         ></div>
                         <div className="comments" style={{ position: 'relative' }}>
-                            {arrComments.map((item) => {
+                            {comments.map((item) => {
                                 return (
-                                    <Tooltip key={item.id} title={item.content} arrow>
+                                    <Tooltip title={item.content} arrow key={item._id}>
                                         <img
                                             onPointerMove={(e) => {
                                                 const hover = hoverRef.current!;
-                                                hover.style.width = calLeft(item.moment);
+                                                hover.style.width = calLeft(item.moment + 3);
                                             }}
                                             style={{
                                                 height: 20,
@@ -245,6 +252,12 @@ const WaveTrack = (props: IProps) => {
                         }}
                     ></div>
                 </div>
+            </div>
+            <div>
+                <LikeTrack track={track}/>
+            </div>
+            <div>
+                <CommentTrack comments={comments} track={track} wavesurfer={wavesurfer} />
             </div>
         </div>
     );

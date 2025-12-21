@@ -6,6 +6,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         <>
             <AppHeader />
             {children}
+            <div style={{ marginBottom: '100px' }} />
             <AppFooter />
         </>
     );
