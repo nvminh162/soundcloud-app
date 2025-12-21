@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useWavesurfer } from '@/utils/customHook';
 import { WaveSurferOptions } from 'wavesurfer.js';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -12,6 +12,7 @@ import { Tooltip } from '@mui/material';
 import { useTrackContext } from '@/lib/track.wrapper';
 import CommentTrack from './comment.track';
 import LikeTrack from './like.track';
+import { sendRequest } from '@/utils/api';
 
 interface IProps {
     track: ITrackTop | null;
@@ -20,6 +21,10 @@ interface IProps {
 
 const WaveTrack = (props: IProps) => {
     const { track, comments } = props;
+    const router = useRouter();
+
+    const firstViewRef = useRef(true);
+
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const searchParams = useSearchParams();
     const fileName = searchParams.get('audio');
@@ -121,6 +126,18 @@ const WaveTrack = (props: IProps) => {
         }
     }, [track]);
 
+    const handleIncreaseView = async () => {
+        if (firstViewRef.current) {
+            await sendRequest({
+                url: `http://localhost:8000/api/v1/tracks/increase-view`,
+                method: 'POST',
+                body: { trackId: track?._id },
+            });
+            router.refresh();
+            firstViewRef.current = false;
+        }
+    };
+
     return (
         <div style={{ marginTop: 20 }}>
             <div
@@ -147,6 +164,7 @@ const WaveTrack = (props: IProps) => {
                             <div
                                 onClick={() => {
                                     onPlayClick();
+                                    handleIncreaseView();
                                     if (track && wavesurfer) {
                                         setCurrentTrack({ ...currentTrack, isPlaying: false });
                                     }
@@ -254,7 +272,7 @@ const WaveTrack = (props: IProps) => {
                 </div>
             </div>
             <div>
-                <LikeTrack track={track}/>
+                <LikeTrack track={track} />
             </div>
             <div>
                 <CommentTrack comments={comments} track={track} wavesurfer={wavesurfer} />
