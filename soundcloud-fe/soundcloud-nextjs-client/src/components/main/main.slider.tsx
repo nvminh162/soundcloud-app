@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import Link from 'next/link';
 import { convertSlugUrl } from '@/utils/api';
 import Image from 'next/image';
+// import flower from '../../../public/flower/flowers.jpg'
 
 interface IProps {
     title: string;
@@ -66,6 +67,32 @@ const MainSlider = (props: IProps) => {
         slidesToScroll: 1,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true,
+                },
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2,
+                    initialSlide: 2,
+                },
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
+        ],
     };
     //box === div
 
@@ -97,9 +124,10 @@ const MainSlider = (props: IProps) => {
                 {data.map((track) => (
                     <Link href={`track/${convertSlugUrl(track.title)}-${track._id}.html?audio=${track.trackUrl}`} className="track" key={track._id}>
                         {/* <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} /> */}
-                        <div style={{ position: "relative", height: "360px", width: "100%" }}>
+                        <div style={{ position: 'relative', height: '360px', width: '100%' }}>
                             <Image
                                 alt={track.title}
+                                // src={flower}
                                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
                                 fill // tự dông co giãn = với parent size =thêm fill nextjs sẽ bỏ qua width và height báo lỗi, nextjs sẽ dựa vào HTML
                                 style={{ objectFit: 'contain' }}
