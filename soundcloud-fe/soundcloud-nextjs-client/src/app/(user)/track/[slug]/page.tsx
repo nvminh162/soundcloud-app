@@ -2,6 +2,7 @@ import WaveTrack from '@/components/track/wave.track';
 import { sendRequest } from '@/utils/api';
 import Container from '@mui/material/Container';
 import { Metadata, ResolvingMetadata } from 'next';
+import { notFound } from 'next/navigation';
 
 type Props = {
     params: { slug: string };
@@ -55,6 +56,10 @@ export default async function DetailTrackPage(props: any) {
             trackId: id,
         },
     });
+
+    if (!res?.data) {
+        notFound();
+    }
 
     return (
         <Container>
