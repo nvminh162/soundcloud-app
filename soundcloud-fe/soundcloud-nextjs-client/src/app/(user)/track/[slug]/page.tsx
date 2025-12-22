@@ -42,13 +42,13 @@ export default async function DetailTrackPage(props: any) {
     const id = temp[temp.length - 1];
 
     const res = await sendRequest<IBackendRes<ITrackTop>>({
-        url: `http://localhost:8000/api/v1/tracks/${id}`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
         method: 'GET',
         nextOption: { cache: 'no-store' },
     });
 
     const resCmt = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
-        url: `http://localhost:8000/api/v1/tracks/comments`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/comments`,
         method: 'POST',
         queryParams: {
             current: 1,

@@ -72,7 +72,7 @@ const ProfileTracks = (props: IProps) => {
                     <IconButton aria-label="next">{theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}</IconButton>
                 </Box>
             </Box>
-            <CardMedia component="img" sx={{ width: 151 }} image={`http://localhost:8000/images/${data.imgUrl}`} alt="Live from space album cover" />
+            <CardMedia component="img" sx={{ width: 151 }} image={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${data.imgUrl}`} alt="Live from space album cover" />
         </Card>
     );
 };

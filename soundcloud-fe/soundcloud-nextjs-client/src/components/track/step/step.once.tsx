@@ -62,7 +62,7 @@ export default function StepOnce(props: IProps) {
 
                 // Fetch
                 /* const res = await sendRequestFile<IBackendRes<ITrackTop[]>>({
-                    url: 'http://localhost:8000/api/v1/files/upload',
+                    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/files/upload`,
                     headers: {
                         Authorization: `Bearer ${session?.access_token}`,
                         target_type: 'tracks',
@@ -73,7 +73,7 @@ export default function StepOnce(props: IProps) {
 
                 // Axios
                 try {
-                    const res = await axios.post('http://localhost:8000/api/v1/files/upload', formData, {
+                    const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/files/upload`, formData, {
                         headers: {
                             Authorization: `Bearer ${session?.access_token}`,
                             target_type: 'tracks',
