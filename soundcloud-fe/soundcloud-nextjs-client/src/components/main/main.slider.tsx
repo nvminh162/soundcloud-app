@@ -10,6 +10,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
 import Link from 'next/link';
 import { convertSlugUrl } from '@/utils/api';
+import Image from 'next/image';
 
 interface IProps {
     title: string;
@@ -74,7 +75,7 @@ const MainSlider = (props: IProps) => {
                 margin: '0 50px',
                 '& a': {
                     textDecoration: 'none', // Bỏ gạch chân
-                    color: 'inherit',       // Bỏ màu xanh mặc định của Link, dùng màu của text cha
+                    color: 'inherit', // Bỏ màu xanh mặc định của Link, dùng màu của text cha
                 },
                 '.track': {
                     padding: '0 10px',
@@ -95,7 +96,17 @@ const MainSlider = (props: IProps) => {
             <Slider {...settings}>
                 {data.map((track) => (
                     <Link href={`track/${convertSlugUrl(track.title)}-${track._id}.html?audio=${track.trackUrl}`} className="track" key={track._id}>
-                        <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} />
+                        {/* <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} /> */}
+                        <div style={{ position: "relative", height: "360px", width: "100%" }}>
+                            <Image
+                                alt={track.title}
+                                src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
+                                fill // tự dông co giãn = với parent size =thêm fill nextjs sẽ bỏ qua width và height báo lỗi, nextjs sẽ dựa vào HTML
+                                style={{ objectFit: 'contain' }}
+                            />
+                            {/*do backend không có cơ chế height width ảnh, mặc dù forward _next/image đã truyền w=?q=? ảnh lúc nào cũng là width height ban đầu */}
+                            {/* nếu dùng hình ảnh có sãn trong src của nextjs thì nextjs sẽ làm giúp (local) => cái náy có tính phí! */}
+                        </div>
                         <h4>{track.title}</h4>
                         <h5>{track.description}</h5>
                     </Link>

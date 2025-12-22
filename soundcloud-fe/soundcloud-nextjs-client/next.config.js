@@ -1,22 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  modularizeImports: {
-    '@mui/icons-material': {
-      transform: '@mui/icons-material/{{member}}',
+    reactStrictMode: true,
+    swcMinify: true,
+    modularizeImports: {
+        '@mui/icons-material': {
+            transform: '@mui/icons-material/{{member}}',
+        },
     },
-  },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-        port: '',
-        pathname: '/random',
-      },
-    ],
-  },
+    images: {
+        remotePatterns: [
+            {
+                // protocol: 'https', // production
+                // hostname: 's3.amazonaws.com', // production
+                protocol: 'http', // localhost
+                hostname: 'localhost', // localhost
+                port: '8000',
+                pathname: '/images/**',
+            },
+        ],
+    },
+    /*
+    +thẻ <img src=?/> mặc định sẽ dùng src
+    +thẻ <Image src=?/> sẽ convert sang srcset='/_next/image?url=?&w=?&h=?' => sẽ có khái niệm là responsive image
+    (ứng với một loại màn hình nextjs sẽ load 1 hình ảnh nhất định Laptop(big), Tablet(medium), Mobile(small) => nextjs đã làm chia kích thước màn hình responsive sẵn rồi!)
+     */
 };
 
 module.exports = nextConfig;
