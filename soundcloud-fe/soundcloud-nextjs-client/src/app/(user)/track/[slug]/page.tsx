@@ -52,7 +52,7 @@ export default async function DetailTrackPage(props: any) {
         queryParams: {
             current: 1,
             pageSize: 10,
-            trackId: params.slug,
+            trackId: id,
         },
     });
 

@@ -1,7 +1,6 @@
 'use client'
 import { fetchDefaultImages, sendRequest } from '@/utils/api';
 import { Box, TextField } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
 import { useState } from 'react';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,7 @@ import WaveSurfer from "wavesurfer.js";
 
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useHasMounted } from '@/utils/customHook';
+import Image from 'next/image';
 dayjs.extend(relativeTime)
 
 interface IProps {
@@ -85,12 +85,13 @@ const CommentTrack = (props: IProps) => {
             </div>
             <div style={{ display: "flex", gap: "10px" }}>
                 <div className='left' style={{ width: "190px" }}>
-                    <img
-                        style={{
-                            height: 150, width: 150,
-                        }}
+                    <Image
                         src={fetchDefaultImages(track?.uploader?.type!)}
+                        alt='avatar'
+                        width={35}
+                        height={35}
                     />
+
                     <div>{track?.uploader?.email}</div>
                 </div>
                 <div className='right' style={{ width: "calc(100% - 200px)" }}>
@@ -98,12 +99,16 @@ const CommentTrack = (props: IProps) => {
                         return (
                             <Box key={comment._id} sx={{ display: "flex", gap: "10px", justifyContent: "space-between" }}>
                                 <Box sx={{ display: "flex", gap: "10px", marginBottom: "25px", alignItems: "center" }}>
-                                    <img
+                                    <Image
                                         style={{
-                                            height: 40, width: 40,
-
+                                            height: 40,
+                                            width: 40,
+                                            objectFit: 'cover',
                                         }}
                                         src={fetchDefaultImages(comment.user.type)}
+                                        alt="avatar"
+                                        width={40}
+                                        height={40}
                                     />
                                     <div>
                                         <div style={{ fontSize: "13px" }}>{comment?.user?.name ?? comment?.user?.email} at
