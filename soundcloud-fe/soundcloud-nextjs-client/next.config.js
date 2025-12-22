@@ -10,7 +10,7 @@ const nextConfig = {
     },
     images: {
         // local dev
-        /* remotePatterns: [
+        remotePatterns: [
             {
                 // protocol: 'https', // production
                 // hostname: 's3.amazonaws.com', // production
@@ -19,9 +19,9 @@ const nextConfig = {
                 port: '8000',
                 pathname: '/images/**',
             },
-        ], */
+        ],
         // with docker
-        remotePatterns: [
+        /* remotePatterns: [
             {
                 // protocol: 'https', // production
                 // hostname: 's3.amazonaws.com', // production
@@ -30,7 +30,7 @@ const nextConfig = {
                 port: '8001',
                 pathname: '/images/**',
             },
-        ],
+        ], */
     },
     /*
     +thẻ <img src=?/> mặc định sẽ dùng src
