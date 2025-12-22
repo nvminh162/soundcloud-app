@@ -1,4 +1,4 @@
-# SoundCloud Clone App
+# SoundCloud Clone App => tới SEO Robot.txt (tạm ngưng)
 
 A full-stack music streaming application built with modern web technologies, featuring Next.js 14 frontend and NestJS backend.
 
