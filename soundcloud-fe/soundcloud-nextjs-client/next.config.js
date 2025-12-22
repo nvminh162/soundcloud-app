@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    output: 'standalone',
     reactStrictMode: true,
     swcMinify: true,
     modularizeImports: {
@@ -8,13 +9,25 @@ const nextConfig = {
         },
     },
     images: {
-        remotePatterns: [
+        // local dev
+        /* remotePatterns: [
             {
                 // protocol: 'https', // production
                 // hostname: 's3.amazonaws.com', // production
                 protocol: 'http', // localhost
                 hostname: 'localhost', // localhost
                 port: '8000',
+                pathname: '/images/**',
+            },
+        ], */
+        // with docker
+        remotePatterns: [
+            {
+                // protocol: 'https', // production
+                // hostname: 's3.amazonaws.com', // production
+                protocol: 'http', // localhost
+                hostname: 'host.docker.internal', // localhost with docker
+                port: '8001',
                 pathname: '/images/**',
             },
         ],
