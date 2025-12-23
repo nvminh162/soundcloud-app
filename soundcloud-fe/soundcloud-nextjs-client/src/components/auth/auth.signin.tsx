@@ -191,6 +191,7 @@ const AuthSignIn = (props: any) => {
                                     cursor: 'pointer',
                                     bgcolor: 'black',
                                 }}
+                                onClick={() => signIn('google')}
                             >
                                 <GoogleIcon titleAccess="Login with Google" />
                             </Avatar>
