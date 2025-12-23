@@ -34,6 +34,11 @@ export async function generateMetadata({ params, searchParams }: Props, parent: 
     };
 }
 
+// chỉ chuẩn bị gọi các Link HOT ko gọi hết lên!
+export async function generateStaticParams() {
+    return [{ slug: 'tinh-co-yeu-em-6945720d6b3b0e7784c95914.html' }];
+}
+
 export default async function DetailTrackPage(props: any) {
     const { params } = props;
 
@@ -44,7 +49,7 @@ export default async function DetailTrackPage(props: any) {
     const res = await sendRequest<IBackendRes<ITrackTop>>({
         url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
         method: 'GET',
-        nextOption: { cache: 'no-store' },
+        // nextOption: { cache: 'no-store' },
     });
 
     const resCmt = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
@@ -57,7 +62,7 @@ export default async function DetailTrackPage(props: any) {
         },
     });
 
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    await new Promise(resolve => setTimeout(resolve, 5000))
 
     if (!res?.data) {
         notFound();
