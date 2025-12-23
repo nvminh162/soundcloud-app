@@ -1245,12 +1245,12 @@
 							"urlencoded": [
 								{
 									"key": "category",
-									"value": "HIPHOP",
+									"value": "CHILL",
 									"type": "text"
 								},
 								{
 									"key": "limit",
-									"value": "2",
+									"value": "1",
 									"type": "text"
 								}
 							]
@@ -1574,6 +1574,58 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Next Server Revalidate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "delay",
+						"value": "5000",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/revalidate?tag=n-v-m-i-n-h-1-6-2&secret=nosecretnvminh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"revalidate"
+					],
+					"query": [
+						{
+							"key": "tag",
+							"value": "n-v-m-i-n-h-1-6-2"
+						},
+						{
+							"key": "secret",
+							"value": "nosecretnvminh"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
