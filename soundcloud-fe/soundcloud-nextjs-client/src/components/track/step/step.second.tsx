@@ -166,6 +166,18 @@ export default function StepSecond(props: IProps) {
             // alert('Create track success');
             setValue?.(0);
             toast.success('Create track success');
+
+            // nên đưa từ server component xuống qua props thay vì hardcode!
+            // gọi để clear: data cache
+            await sendRequest<IBackendRes<any>>({
+                url: `/api/revalidate`,
+                method: 'POST',
+                queryParams: {
+                    tag: 'track-by-profile',
+                    secret: `nosecretnvminh`
+                }
+            });
+
         } else {
             // alert(res.message);
             toast.error(res.message);

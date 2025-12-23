@@ -1,6 +1,6 @@
-import ProfileTracks from "@/components/profile/profile.tracks";
-import { sendRequest } from "@/utils/api";
-import { Container } from "@mui/material";
+import ProfileTracks from '@/components/profile/profile.tracks';
+import { sendRequest } from '@/utils/api';
+import { Container } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 const ProfileUserPage = async ({ params }: { params: { slug: string } }) => {
@@ -8,14 +8,17 @@ const ProfileUserPage = async ({ params }: { params: { slug: string } }) => {
 
     const data = await sendRequest({
         url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/users?current=1&pageSize=10`,
-        method: "POST",
-        body: { id: slug }
-    })
+        method: 'POST',
+        body: { id: slug },
+        nextOption: {
+            // cache: 'no-store',
+            next: { tags: ['track-by-profile'] }
+        },
+    });
 
     //@ts-ignore
-    const d = data?.data?.result ?? []
+    const d = data?.data?.result ?? [];
     return (
-
         <Container sx={{ my: 5 }}>
             <Grid container spacing={5}>
                 {d.map((item: any, index: number) => {
@@ -23,12 +26,11 @@ const ProfileUserPage = async ({ params }: { params: { slug: string } }) => {
                         <Grid item xs={12} md={6} key={index}>
                             <ProfileTracks data={item} />
                         </Grid>
-                    )
+                    );
                 })}
             </Grid>
         </Container>
-
-    )
-}
+    );
+};
 
 export default ProfileUserPage;

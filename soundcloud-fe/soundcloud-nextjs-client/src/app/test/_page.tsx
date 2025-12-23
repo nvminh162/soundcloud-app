@@ -1,4 +1,4 @@
-import { sendRequest } from '@/utils/api';
+/* import { sendRequest } from '@/utils/api';
 import Container from '@mui/material/Container';
 
 export default async function TestA() {
@@ -19,3 +19,4 @@ export default async function TestA() {
         </Container>
     );
 }
+ */
