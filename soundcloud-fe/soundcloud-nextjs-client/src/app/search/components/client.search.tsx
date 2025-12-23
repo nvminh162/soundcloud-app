@@ -30,7 +30,7 @@ const ClientSearch = () => {
     }
     useEffect(() => {
         //update document title by query
-        document.title = `"${query}" trên Hỏi Dân IT SC`;
+        document.title = `"${query}" trên nvminh162`;
 
         //fetch data
         if (query)
