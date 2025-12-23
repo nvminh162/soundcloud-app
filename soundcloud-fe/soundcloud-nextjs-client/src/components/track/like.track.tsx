@@ -3,9 +3,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useState } from 'react';
 import { sendRequest } from '@/utils/api';
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface IProps {
     track: ITrackTop | null;
@@ -21,58 +20,70 @@ const LikeTrack = (props: IProps) => {
         if (session?.access_token) {
             const res2 = await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
                 url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/likes`,
-                method: "GET",
+                method: 'GET',
                 queryParams: {
                     current: 1,
                     pageSize: 100,
-                    sort: "-createdAt"
+                    sort: '-createdAt',
                 },
                 headers: {
                     Authorization: `Bearer ${session?.access_token}`,
                 },
-            })
-            if (res2?.data?.result)
-                setTrackLikes(res2?.data?.result)
+            });
+            if (res2?.data?.result) setTrackLikes(res2?.data?.result);
         }
-    }
+    };
     useEffect(() => {
         fetchData();
-    }, [session])
+    }, [session]);
 
     const handleLikeTrack = async () => {
         await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/likes`,
-            method: "POST",
+            method: 'POST',
             body: {
                 track: track?._id,
-                quantity: trackLikes?.some(t => t._id === track?._id) ? -1 : 1,
+                quantity: trackLikes?.some((t) => t._id === track?._id) ? -1 : 1,
             },
             headers: {
                 Authorization: `Bearer ${session?.access_token}`,
             },
-        })
+        });
 
         fetchData();
+        // thực hiện lại validate lại dữ liệu API nếu link api được gọi lại -> clear data cache
+        await sendRequest<IBackendRes<any>>({
+            url: `/api/revalidate`,
+            method: 'POST',
+            queryParams: {
+                tag: 'track-by-id', // kiểm tra tag có giống tag ở cha không -> xác định dữ liệu cần làm mới
+                secret: 'nosecretnvminh', // thông tin bảo mật !!!có thể bị lỗi secret thông tin do chạy ở client
+            },
+        });
         router.refresh();
-
-    }
+    };
     return (
-        <div style={{ margin: "20px 10px 0 10px", display: "flex", justifyContent: "space-between" }}>
+        <div style={{ margin: '20px 10px 0 10px', display: 'flex', justifyContent: 'space-between' }}>
             <Chip
                 onClick={() => handleLikeTrack()}
-                sx={{ borderRadius: "5px" }}
+                sx={{ borderRadius: '5px' }}
                 size="medium"
                 variant="outlined"
-                color={trackLikes?.some(t => t._id === track?._id) ? "error" : "default"}
+                color={trackLikes?.some((t) => t._id === track?._id) ? 'error' : 'default'}
                 clickable
-                icon={<FavoriteIcon />} label="Like"
+                icon={<FavoriteIcon />}
+                label="Like"
             />
-            <div style={{ display: "flex", width: "100px", gap: "20px", color: "#999" }}>
-                <span style={{ display: "flex", alignItems: "center" }}><PlayArrowIcon sx={{ fontSize: "20px" }} /> {track?.countPlay}</span>
-                <span style={{ display: "flex", alignItems: "center" }}><FavoriteIcon sx={{ fontSize: "20px" }} /> {track?.countLike}</span>
+            <div style={{ display: 'flex', width: '100px', gap: '20px', color: '#999' }}>
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <PlayArrowIcon sx={{ fontSize: '20px' }} /> {track?.countPlay}
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <FavoriteIcon sx={{ fontSize: '20px' }} /> {track?.countLike}
+                </span>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default LikeTrack;
