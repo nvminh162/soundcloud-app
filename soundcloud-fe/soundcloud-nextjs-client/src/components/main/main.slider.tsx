@@ -121,7 +121,7 @@ const MainSlider = (props: IProps) => {
             <h2>{title}</h2>
 
             <Slider {...settings}>
-                {data.map((track) => (
+                {data.map((track, index) => (
                     <Link href={`track/${convertSlugUrl(track.title)}-${track._id}.html?audio=${track.trackUrl}`} className="track" key={track._id}>
                         {/* <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} /> */}
                         <div style={{ position: 'relative', height: '360px', width: '100%' }}>
@@ -130,6 +130,8 @@ const MainSlider = (props: IProps) => {
                                 // src={flower}
                                 src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
                                 fill // tự dông co giãn = với parent size =thêm fill nextjs sẽ bỏ qua width và height báo lỗi, nextjs sẽ dựa vào HTML
+                                sizes="(max-width: 480px) 100vw, (max-width: 600px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                                priority={title === 'Top Chill' && index === 0}
                                 style={{ objectFit: 'contain' }}
                             />
                             {/*do backend không có cơ chế height width ảnh, mặc dù forward _next/image đã truyền w=?q=? ảnh lúc nào cũng là width height ban đầu */}

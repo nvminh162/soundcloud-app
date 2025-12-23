@@ -132,59 +132,66 @@ export default function AppHeader() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            {session ? (
-                <>
-                    <MenuItem
-                        onClick={() => {
-                            handleMobileMenuClose();
-                            router.push('/playlist');
+            {session ? [
+                <MenuItem
+                    key="playlists"
+                    onClick={() => {
+                        handleMobileMenuClose();
+                        router.push('/playlist');
+                    }}
+                >
+                    Playlists
+                </MenuItem>,
+                <MenuItem
+                    key="likes"
+                    onClick={() => {
+                        handleMobileMenuClose();
+                        router.push('/like');
+                    }}
+                >
+                    Likes
+                </MenuItem>,
+                <MenuItem
+                    key="upload"
+                    onClick={() => {
+                        handleMobileMenuClose();
+                        router.push('/track/upload');
+                    }}
+                >
+                    Upload
+                </MenuItem>,
+                <MenuItem
+                    key="profile"
+                    onClick={() => {
+                        handleMobileMenuClose();
+                        router.push(`/profile/${session.user._id}`);
+                    }}
+                >
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="primary-search-account-menu"
+                        aria-haspopup="true"
+                        color="inherit"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleProfileMenuOpen(e);
                         }}
                     >
-                        Playlists
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            handleMobileMenuClose();
-                            router.push('/like');
-                        }}
-                    >
-                        Likes
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            handleMobileMenuClose();
-                            router.push('/track/upload');
-                        }}
-                    >
-                        Upload
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            handleMobileMenuClose();
-                            router.push(`/profile/${session.user._id}`);
-                        }}
-                    >
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="primary-search-account-menu"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <Image onClick={handleProfileMenuOpen} src={fetchDefaultImages(session.user.type)} alt="avatar" width={35} height={35} />
-                        </IconButton>
-                        <p>Profile</p>
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            handleMobileMenuClose();
-                            signOut();
-                        }}
-                    >
-                        Logout
-                    </MenuItem>
-                </>
-            ) : (
+                        <Image src={fetchDefaultImages(session.user.type)} alt="avatar" width={35} height={35} />
+                    </IconButton>
+                    <p>Profile</p>
+                </MenuItem>,
+                <MenuItem
+                    key="logout"
+                    onClick={() => {
+                        handleMobileMenuClose();
+                        signOut();
+                    }}
+                >
+                    Logout
+                </MenuItem>
+            ] : (
                 <MenuItem
                     onClick={() => {
                         handleMobileMenuClose();
