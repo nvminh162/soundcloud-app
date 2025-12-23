@@ -134,6 +134,18 @@ const WaveTrack = (props: IProps) => {
                 method: 'POST',
                 body: { trackId: track?._id },
             });
+
+            // nên đưa từ server component xuống qua props thay vì hardcode!
+            // gọi để clear: data cache
+            await sendRequest<IBackendRes<any>>({
+                url: `/api/revalidate`,
+                method: 'POST',
+                queryParams: {
+                    tag: 'track-by-id',
+                    secret: `nosecretnvminh`
+                }
+            });
+            // gọi refresh để cập nhật giao diện mới => // gọi để clear: router cache
             router.refresh();
             firstViewRef.current = false;
         }

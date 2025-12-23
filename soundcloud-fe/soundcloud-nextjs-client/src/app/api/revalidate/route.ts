@@ -15,6 +15,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // secret=<token>
 // => nếu lộ REVALIDATE_SECRET => hacker có thể gọi API liên tục => website sẽ build lại liên tục
 export async function POST(request: NextRequest) {
+    // logic check domain (thêm logic để reject nếu dc gọi từ tên miền khác)
     const secret = request.nextUrl.searchParams.get('secret');
     const tag = request.nextUrl.searchParams.get('tag');
 

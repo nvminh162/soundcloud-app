@@ -50,6 +50,9 @@ export default async function DetailTrackPage(props: any) {
         url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks/${id}`,
         method: 'GET',
         // nextOption: { cache: 'no-store' },
+        nextOption: {
+            next: { tags: ['track-by-id'] },
+        },
     });
 
     const resCmt = await sendRequest<IBackendRes<IModelPaginate<ITrackComment>>>({
@@ -62,8 +65,7 @@ export default async function DetailTrackPage(props: any) {
         },
     });
 
-    await new Promise(resolve => setTimeout(resolve, 5000))
-
+    // Nếu không có thông tin, dữ liệu bài hát thì render ra trang not-found cùng cấp
     if (!res?.data) {
         notFound();
     }
