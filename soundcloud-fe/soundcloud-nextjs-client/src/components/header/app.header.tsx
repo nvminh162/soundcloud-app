@@ -210,7 +210,7 @@ export default function AppHeader() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#333' }}>
+            <AppBar position="static" sx={{ backgroundColor: '#FF0066' }}>
                 <Container>
                     <Toolbar>
                         <Typography
@@ -220,7 +220,7 @@ export default function AppHeader() {
                             sx={{ display: { xs: 'none', sm: 'block', cursor: 'pointer' } }}
                             onClick={handleRedirectHome}
                         >
-                            MinhSoundcloud
+                            NVMINH162 SCL
                         </Typography>
                         <Search>
                             <SearchIconWrapper>
