@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 import { convertSlugUrl, sendRequest } from '@/utils/api';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/auth.options';
 import Image from 'next/image';
 import Link from 'next/link';
 
