@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import { sendRequest } from '@/utils/api';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { handleLikeTrackAction } from '@/utils/actions/actions';
 
 interface IProps {
     track: ITrackTop | null;
 }
+
 const LikeTrack = (props: IProps) => {
     const { track } = props;
     const { data: session } = useSession();
@@ -38,28 +40,10 @@ const LikeTrack = (props: IProps) => {
     }, [session]);
 
     const handleLikeTrack = async () => {
-        await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
-            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/likes`,
-            method: 'POST',
-            body: {
-                track: track?._id,
-                quantity: trackLikes?.some((t) => t._id === track?._id) ? -1 : 1,
-            },
-            headers: {
-                Authorization: `Bearer ${session?.access_token}`,
-            },
-        });
-
+        const id = track?._id;
+        const quantity = trackLikes?.some((t) => t._id === track?._id) ? -1 : 1;
+        await handleLikeTrackAction(id, quantity);
         fetchData();
-        // thực hiện lại validate lại dữ liệu API nếu link api được gọi lại -> clear data cache
-        await sendRequest<IBackendRes<any>>({
-            url: `/api/revalidate`,
-            method: 'POST',
-            queryParams: {
-                tag: 'track-by-id', // kiểm tra tag có giống tag ở cha không -> xác định dữ liệu cần làm mới
-                secret: 'nosecretnvminh', // thông tin bảo mật !!!có thể bị lỗi secret thông tin do chạy ở client
-            },
-        });
         router.refresh();
     };
     return (
