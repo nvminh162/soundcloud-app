@@ -13,7 +13,7 @@ export default function HomePage() {
     if(state?.data?.access_token) {
       message.success("LOGIN OK");
     } else {
-      message.error("LOGIN NO OK");
+      message.error(state?.message);
     }
   }, [state])
 
