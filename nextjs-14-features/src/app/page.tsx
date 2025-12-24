@@ -1,12 +1,9 @@
+'use client'
+
 import { SubmitButton } from "@/components/submit.button";
+import { handleLogin } from '@/app/user/actions'
 
 export default function HomePage() {
-  const handleLogin = async (formData: FormData) => {
-    "use server";
-    console.log(`check form data`, formData.get('password'));
-    await new Promise(resolve => setTimeout(resolve, 5000));
-  };
-
   return (
     <div style={{ marginLeft: 200 }}>
       <h2>HTML Forms</h2>
