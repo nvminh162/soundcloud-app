@@ -1,7 +1,10 @@
+import { SubmitButton } from "@/components/submit.button";
+
 export default function HomePage() {
   const handleLogin = async (formData: FormData) => {
     "use server";
     console.log(`check form data`, formData.get('password'));
+    await new Promise(resolve => setTimeout(resolve, 5000));
   };
 
   return (
@@ -19,7 +22,8 @@ export default function HomePage() {
         <input type="text" name="password" />
         <br />
         <br />
-        <input type="submit" value="Submit" />
+        {/* <input type="submit" value="Submit" /> */}
+        <SubmitButton />
       </form>
     </div>
   );
