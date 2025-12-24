@@ -15,8 +15,8 @@ const CRUDPage = async ({ searchParams }: {
                 'Authorization': `Bearer ${ACCESS_TOKEN}`,
                 "Content-Type": "application/json",
             },
-            // next: { tags: ['listUsers'] }
-            cache: 'no-store'
+            next: { tags: ['listUsers'] }
+            // cache: 'no-store'
         })
 
     const raw = await res.json();
