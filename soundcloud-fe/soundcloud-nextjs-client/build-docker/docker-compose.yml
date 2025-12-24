@@ -10,7 +10,7 @@ services:
     image: harypham97/hoidanit-backend-soundcloud-public:1.0
     environment:
       PORT: 8001
-      MONGO_URL: mongodb+srv://nvminh1602:nvminh1602@cluster0.sh1iqcw.mongodb.net/soundclound-app
+      MONGO_URL: mongodb+srv://your_account_username:your_account_password@cluster0.sh1iqcw.mongodb.net/soundclound-app
     ports:
       - 8001:8001
 
